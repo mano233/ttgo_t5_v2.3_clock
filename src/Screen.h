@@ -47,7 +47,7 @@ public:
 
     void drawBme(const bme_t *bmeData);
 
-    void drawWeather(int x, int y, const char *weatherStr, int weatherCode, int tempL, int tempH);
+    void drawWeather(int x, int y, const weather_t *weatherData);
 private:
     void LCD_one(int num, int loc);
     // 解析天气json中的天气code，返回对应icon 的bitmap的起始位置

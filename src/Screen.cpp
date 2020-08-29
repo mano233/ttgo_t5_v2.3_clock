@@ -2,7 +2,7 @@
 // Created by mano233 on 2020/8/25.
 //
 #include "Screen.h"
-
+#include "type.h"
 
 
 void Screen::init() {
@@ -151,15 +151,14 @@ void Screen::powerOff() {
     display->powerDown();
 }
 
-void Screen::drawWeather(int x, int y, const char *weatherStr, int weatherCode,int tempL, int tempH) {
+void Screen::drawWeather(int x, int y, const weather_t *weatherData) {
     int w = 100;
     int h = 30;
     int iconSize = 25;
     display->fillRect(x, y, w, h, GxEPD_BLACK);
 
     int startIndex =0 ;
-    weatherIconDecoder(weatherCode,&startIndex);
-    Serial.printf("weatherCode:%d...\n",weatherCode);
+    weatherIconDecoder(weatherData->weatherCode,&startIndex);
     unsigned char icon[100]={0};
     memcpy(icon,WEATHERICON+startIndex,ICONBITMAPSIZE);
     // 绘制天气icon
@@ -171,10 +170,10 @@ void Screen::drawWeather(int x, int y, const char *weatherStr, int weatherCode,i
     u8g2->setForegroundColor(GxEPD_WHITE);
     u8g2->setCursor(33 + x, y + 14);
     // 绘制天气文本
-    u8g2->print(weatherStr);
+    u8g2->print(weatherData->weatherStr);
 
     for (int i = 0; i < 2; i++) {
-        int temp = i == 0 ? tempL : tempH;
+        int temp = i == 0 ? weatherData->tempL : weatherData->tempH;
         int num_l, num_h;
         num_l = abs(temp) % 10;
         num_h = abs(temp) / 10;

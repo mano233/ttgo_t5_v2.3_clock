@@ -23,6 +23,7 @@ public:
     bme_t bme280_info{0,0,0};
     Board();
     void updateBmeData();
+    void updateWeather();
     ~Board();
     void init();
 };
