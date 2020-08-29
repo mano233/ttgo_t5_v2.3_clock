@@ -1,48 +1,38 @@
-#include "Borad.h"
-#include <NTPClient.h>
-#include <Wire.h>
-#include <HTTPClient.h>
-#include <ArduinoJson.h>
-#include <WiFi.h>
-#include <Adafruit_BME280.h>
+#include "Board.h"
 
-HTTPClient *http;
+HTTPClient http;
 
-struct weather_t weatherInfo;
-
+void callbackFunction (Button2&);
 Board::Board() {
-    spi = new SPIClass();
-    screen = new Screen(*spi);
-    bme = new Adafruit_BME280();
+    // spi = new SPIClass();
+    // screen = new Screen(*spi);
+    // bme = new Adafruit_BME280();
 }
-
 
 void Board::init() {
     Serial.println("---board init---");
-    // spi->begin(SPI_CLK, SPI_MISO, SPI_MOSI, -1);
-    if(!bme->begin(0x76,&Wire)){
+    if(!bme.begin(0x76,&Wire)){
         Serial.println("bme not found!");
     }
+    buttonInit();
+    // screen->init();
     updateBmeData();
-    // Serial.printf("bme_info:{ temperature:%d,humidity:%d,pressure:%d }",(int)bme->readTemperature(),(int)bme->readHumidity(),(int)(bme->readPressure() / 100.0F));
-    screen->init();
-    screen->showMainPage();
-    updateBmeData();
-    updateWeather();
+    // screen->showMainPage();
+    // updateWeather();
 }
 
 Board::~Board() {
     delete screen;
-    delete spi;
+    // delete spi;
 }
 
 void Board::updateBmeData() {
     Serial.println("---update bme280 data---");
-    bme280_info.temperature= (int)bme->readTemperature()*10;
-    bme280_info.humidity= (int)bme->readHumidity();
-    bme280_info.pressure= (int)(bme->readPressure() / 100.0F);
+    bme280_info.temperature= (int)(bme.readTemperature()*10.0);
+    bme280_info.humidity= (int)bme.readHumidity();
+    bme280_info.pressure= (int)(bme.readPressure() / 100.0F);
     Serial.printf("bme_info:{ temperature:%d,humidity:%d,pressure:%d }\n",bme280_info.temperature,bme280_info.humidity,bme280_info.pressure);
-    screen->drawBme(&bme280_info);
+    // screen->drawBme(&bme280_info);
 }
 
 void Board::errorHandler() const {
@@ -52,14 +42,15 @@ void Board::errorHandler() const {
     esp_deep_sleep_start();
 }
 
-void Board::updateWeather() {
+void Board::updateWeather() const {
+    Serial.printf("update weather...\n");
     StaticJsonDocument<3000> jsonBuffer;
-    http->end();
-    http->begin(
+    http.end();
+    http.begin(
             "https://api.seniverse.com/v3/weather/daily.json?key=S9ecTZM2j06C6HWR3&location=WTMKQ069CCJ7&language=zh-Hans&unit=c&start=0&days=2");
-    int httpResponseCode = http->GET();
+    int httpResponseCode = http.GET();
     if (httpResponseCode > 0) {
-        DeserializationError error = deserializeJson(jsonBuffer, http->getString());
+        DeserializationError error = deserializeJson(jsonBuffer, http.getString());
         // Test if parsing succeeds.
         if (error) {
             Serial.print(F("deserializeJson() failed: "));
@@ -89,9 +80,17 @@ void Board::updateWeather() {
         screen->drawWeather(0, 92, &tomorrowWeather);
     }
 
-
-    http->end();
+    http.end();
 }
+
+void Board::buttonInit() {
+    button.setPressedHandler(callbackFunction);
+}
+
+void callbackFunction (Button2&b){
+    Serial.println("button_39 click");
+}
+
 
 
 

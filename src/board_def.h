@@ -7,14 +7,7 @@
 #define TTGO_T5_2_8 0   //! Silk screen marking T5_V28_27
 
 #if (TTGO_T5_1_2) || (TTGO_T5_2_4)
-//#include <GxGDEP015OC1/GxGDEP015OC1.h>    // 1.54" b/w
-// #include <GxGDEW0154Z04/GxGDEW0154Z04.h>  // 1./54" b/w/r 200x200
-//#include <GxGDEW0154Z17/GxGDEW0154Z17.h>  // 1.54" b/w/r 152x152
-// #include <GxGDEW027W3/GxGDEW027W3.h> // 2.7" b/w
 #include <GxGDEH029A1/GxGDEH029A1.h>     // 2.9" b/w
-//#include <GxGDEW029Z10/GxGDEW029Z10.h>    // 2.9" b/w/r
-//#include <GxGDE0213B1/GxGDE0213B1.h>      // 2.13" b/w
-// #include <GxGDEW0213Z16/GxGDEW0213Z16.h>  // 2.13" b/w/r
 #define ELINK_BUSY 4
 #define ELINK_RESET 16
 #define ELINK_DC 17
@@ -71,12 +64,7 @@
 #define SPEAKER_OUT 25
 
 #elif (TTGO_T5_2_0) || (TTGO_T5_2_3)
-//#include <GxGDE0213B1/GxGDE0213B1.h>      // 2.13" b/w
-//#include <GxGDE0213B72/GxGDE0213B72.h>      // 2.13" b/w     GxGDE0213B1 升级版本
 #include <GxGDE0213B72B/GxGDE0213B72B.h> // 2.13" b/w           GxGDE0213B72 升级版本 默认LilyGO的出厂屏幕都是这种
-//#include <GxGDEW0213I5F/GxGDEW0213I5F.h>
-//#include <GxGDEH0213B73/GxGDEH0213B73.h>
-//#include <GxGDEH0213B72/GxGDEH0213B72.h>
 #define SPI_MOSI 23
 #define SPI_MISO -1
 #define SPI_CLK 18
@@ -193,7 +181,7 @@
 #define I2C_SDA     21
 #define I2C_SCL     22
 
-// https://github.com/earlephilhower/ESP8266Audio
+
 #include <HTTPClient.h> //Remove ESP8266 warning
 #include "AudioFileSourceSPIFFS.h"
 #include "AudioGeneratorMP3.h"
